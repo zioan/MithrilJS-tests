@@ -2,6 +2,7 @@ import { Home } from './root/home.js';
 import { About } from './root/about.js';
 
 const root = document.getElementById('root');
+const layout = document.getElementById('layout');
 
 const Menu = () => {
   const navItem = {
@@ -10,12 +11,31 @@ const Menu = () => {
     color: 'blue',
   };
 
+  const getPath = () => {
+    const path = m.route.get();
+    if (path === '/') {
+      console.log('home');
+    } else if (path === '/about') {
+      console.log('about');
+    } else {
+      console.log('another path');
+    }
+  };
+
   return {
     view: () => {
       return [
         m('nav', { style: { display: 'flex', gap: '2rem' } }, [
-          m(m.route.Link, { href: '/', style: navItem }, 'Home'),
-          m(m.route.Link, { href: '/about', style: navItem }, 'About'),
+          m(
+            m.route.Link,
+            { href: '/', style: navItem, onclick: () => getPath() },
+            'Home'
+          ),
+          m(
+            m.route.Link,
+            { href: '/about', style: navItem, onclick: () => getPath() },
+            'About'
+          ),
         ]),
       ];
     },
@@ -23,7 +43,8 @@ const Menu = () => {
 };
 
 m.mount(root, Menu);
-// m.route(root, '/', {
-//   '/': () => m(Home),
-//   '/about': () => m(About),
-// });
+
+m.route(layout, '/', {
+  '/': Home,
+  '/about': About,
+});
